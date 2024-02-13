@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    <div class="hero-wrap js-fullheight">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text js-fullheight justify-content-center align-items-center">
+                <div class="col-lg-10 ftco-animate d-flex align-items-center">
+                    <div class="text text-center">
+                        <h1 class="mb-3 bread">Blog Single Post</h1>
+                        <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'main:index' %}">Home <i
+                                class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a
+                                href="{% url 'main:index' %}">Blog <i
+                                class="ion-ios-arrow-forward"></i></a></span> <span>Blog Single <i
+                                class="ion-ios-arrow-forward"></i></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 ftco-animate">
+                    <h2 class="mb-3">{{ article.title }}</h2>
+                    <p>{{ article.content }}</p>
+                    <p style="max-width: 80%; text-align: center; margin: 0 auto">
+                        <img src="{{ article.image.url }}" alt class="img-fluid">
+                    </p>
+                    {% if article.subarticle_set.all %}
+                        {% for subarticle in article.subarticle_set.all %}
+                            {% if subarticle.title %}
+                                <h3>{{ subarticle.title }}</h3>
+                            {% endif %}
+                            <p>{{ subarticle.content }}</p>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="tag-widget post-tag-container mb-5 mt-5">
+                        <div class="tagcloud">
+                            <a href="#" class="tag-cloud-link">Life</a>
+                            <a href="#" class="tag-cloud-link">Sport</a>
+                            <a href="#" class="tag-cloud-link">Tech</a>
+                            <a href="#" class="tag-cloud-link">Travel</a>
+                        </div>
+                    </div>
+                    <div class="about-author d-flex p-4 bg-light">
+                        <div class="bio mr-5">
+                            <img src="{{ article.author.image.url }}" alt="Image placeholder"
+                                 class="img-fluid mb-4">
+                        </div>
+                        <div class="desc">
+                            <h3>{{ article.author.name }}</h3>
+                            <p>{{ article.author.bio }}</p>
+                        </div>
+                    </div>
+
+
+                    <div class="pt-5 mt-5">
+                        <h3 class="mb-5">{{ comments.count }} Comments</h3>
+                        {% for comment in comments %}
+                            <ul class="comment-list">
+                                <li class="comment">
+                                    <div class="vcard bio">
+                                        {% if comment.image %}
+                                            <img src="{{ comment.image.url }}"
+                                                 alt="Image placeholder">
+                                        {% else %}
+                                            <img src="{% static 'images/profile_default.png' %}"
+                                                 alt="Image placeholder">
+                                        {% endif %}
+                                    </div>
+                                    <div class="comment-body">
+                                        <h3>{{ comment.name }}</h3>
+                                        <div class="meta">{{ comment.created_at }}</div>
+                                        <p>{{ comment.message }}</p>
+                                        <p><a href="?cid={{ comment.id }}#comment-form-reply" class="reply">Reply</a>
+                                        </p>
+                                    </div>
+                                </li>
+                                {% if comment.children %}
+                                    {% for child in comment.children %}
+                                        <div style="margin-left: 50px">
+                                            <li class="comment ml-md-4">
+                                                <div class="vcard bio">
+                                                    {% if comment.image %}
+                                                        <img src="{{ comment.image.url }}"
+                                                             alt="Image placeholder">
+                                                    {% else %}
+                                                        <img src="{% static 'images/profile_default.png' %}"
+                                                             alt="Image placeholder">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="comment-body">
+                                                    <code>{{ child.parent.name }} < {{ child.name }}</code>
+                                                    <h3>{{ child.name }}</h3>
+                                                    <div class="meta">{{ child.created_at }}</div>
+                                                    <p>{{ child.message }}</p>
+                                                    <p><a href="?cid={{ child.id }}#comment-form-reply" class="reply">Reply</a>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+
+                        {% endfor %}
+
+                        <div class="comment-form-wrap pt-5" id="comment-form-reply">
+                            <h3 class="mb-5">Leave a comment</h3>
+                            <form method="post" class="p-5 bg-light" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="name">Name *</label>
+                                    {{ form.name }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="image">Image *</label>
+                                    {{ form.image }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">E-mail</label>
+                                    {{ form.email }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    {{ form.message }}
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-lg-4 sidebar ftco-animate">
+                    <div class="sidebar-box">
+                        <form action="#" class="search-form">
+                            <div class="form-group">
+                                <span class="icon icon-search"></span>
+                                <input name="q" type="text" class="form-control" placeholder="Search...">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="sidebar-box ftco-animate">
+                        <h3 class="heading-sidebar">Recent Blog</h3>
+                        {% for article in articles %}
+                            <div class="block-21 mb-4 d-flex">
+                                <a class="blog-img mr-4" style="background-image: url({{ article.image.url }});"></a>
+                                <div class="text">
+                                    <h3 class="heading"><a
+                                            href="{% url 'articles:detail' article.slug %}">{{ article.title|slice:'50' }}</a>
+                                    </h3>
+                                    <div class="meta">
+                                        <div>
+                                            <a href="#"><span class="icon-calendar"></span>{{ article.created_date }}
+                                            </a>
+                                        </div>
+                                        <div><a href="#"><span class="icon-person"></span>{{ article.author }}</a></div>
+                                        <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="sidebar-box ftco-animate">
+                        <h3 class="heading-sidebar">Categories</h3>
+                        <ul class="categories">
+                            <li><a href="#">Interior Design <span>(12)</span></a></li>
+                            <li><a href="#">Exterior Design <span>(22)</span></a></li>
+                            <li><a href="#">Industrial Design <span>(37)</span></a></li>
+                            <li><a href="#">Landscape Design <span>(42)</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="sidebar-box ftco-animate">
+                        <h3 class="heading-sidebar">Tag Cloud</h3>
+                        <div class="tagcloud">
+                            <a href="#" class="tag-cloud-link">house</a>
+                            <a href="#" class="tag-cloud-link">office</a>
+                            <a href="#" class="tag-cloud-link">building</a>
+                            <a href="#" class="tag-cloud-link">land</a>
+                            <a href="#" class="tag-cloud-link">table</a>
+                            <a href="#" class="tag-cloud-link">interior</a>
+                            <a href="#" class="tag-cloud-link">exterior</a>
+                            <a href="#" class="tag-cloud-link">industrial</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+<!-- Mirrored from preview.colorlib.com/theme/ronaldo/single.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 27 Jan 2024 13:55:09 GMT -->
