@@ -11,6 +11,14 @@ class Author(models.Model):
     image = models.ImageField(upload_to='media/articles/', null=True, blank=True)
 
 
+class Category(models.Model):
+    title = models.CharField(max_length=255)
+
+
+class Tag(models.Model):
+    title = models.CharField(max_length=255)
+
+
 class Article(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='media/articles/', blank=True, null=True)
@@ -18,6 +26,8 @@ class Article(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField()
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, blank=True)
+    tags = models.ManyToManyField(Tag)
+    categories = models.ManyToManyField(Category)
 
     class Meta:
         verbose_name = "Articles"

@@ -3,13 +3,15 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 
 from articles.forms import CommentForm
-from articles.models import Article, Comment
+from articles.models import Article, Comment, Tag, Category
 
 
 def detail(request, slug, *args, **kwargs):
     form = CommentForm()
     article = get_object_or_404(Article, slug=slug)
     articles = Article.objects.order_by("-id")[:3]
+    tags = Tag.objects.all()
+    categories = Category.objects.all()
     q = request.GET.get('q')
     comments = Comment.objects.filter(article_id=article.id, top_level_comment_id__isnull=True)
     if q:
@@ -33,6 +35,8 @@ def detail(request, slug, *args, **kwargs):
         'form': form,
         'article': article,
         'articles': articles,
+        'categories': categories,
+        'tags': tags,
         'comments': comments
     }
     return render(request, 'single.html', ctx)

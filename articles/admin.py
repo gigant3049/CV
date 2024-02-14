@@ -1,13 +1,22 @@
 from django.contrib import admin
 
 from . import models
-from .models import Author, Article, SubArticle, Comment
+from .models import Author, Article, SubArticle, Comment, Tag, Category
 
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('id','name', 'bio')
     search_fields = ('name', )
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
 
 
 class SubArticleInlineAdmin(admin.TabularInline):

@@ -172,23 +172,17 @@
                     <div class="sidebar-box ftco-animate">
                         <h3 class="heading-sidebar">Categories</h3>
                         <ul class="categories">
-                            <li><a href="#">Interior Design <span>(12)</span></a></li>
-                            <li><a href="#">Exterior Design <span>(22)</span></a></li>
-                            <li><a href="#">Industrial Design <span>(37)</span></a></li>
-                            <li><a href="#">Landscape Design <span>(42)</span></a></li>
+                            {% for category in categories %}
+                                <li><a href="#">{{ category.title }} <span>(12)</span></a></li>
+                            {% endfor %}
                         </ul>
                     </div>
                     <div class="sidebar-box ftco-animate">
                         <h3 class="heading-sidebar">Tag Cloud</h3>
                         <div class="tagcloud">
-                            <a href="#" class="tag-cloud-link">house</a>
-                            <a href="#" class="tag-cloud-link">office</a>
-                            <a href="#" class="tag-cloud-link">building</a>
-                            <a href="#" class="tag-cloud-link">land</a>
-                            <a href="#" class="tag-cloud-link">table</a>
-                            <a href="#" class="tag-cloud-link">interior</a>
-                            <a href="#" class="tag-cloud-link">exterior</a>
-                            <a href="#" class="tag-cloud-link">industrial</a>
+                            {% for tag in tags %}
+                                <a href="#" style="color: #16181b" class="tag-cloud-link">{{ tag.title }}</a>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
